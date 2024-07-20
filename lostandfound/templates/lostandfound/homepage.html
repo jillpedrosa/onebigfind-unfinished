@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Added viewport for responsiveness -->
+    <title>One Big Find 🦅</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"> <!-- Google Fonts -->
+    <link rel="stylesheet" href="{% static 'lostandfound/css/style.css' %}"> <!-- Link to your custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background color */
+            background-image: url('{% static "lostandfound/images/background.jpg" %}'); /* Subtle background image */
+            background-size: cover;
+            background-attachment: fixed; /* Fixed background for parallax effect */
+            font-family: 'Roboto', sans-serif; /* Use Roboto font */
+        }
+        .hero {
+            background: linear-gradient(135deg, rgba(55, 152, 255, 0.8), rgba(0, 86, 179, 0.8)), url('{% static "lostandfound/images/hero-bg.jpg" %}'); /* Gradient with image overlay */
+            background-size: cover;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .hero h1, .hero h2 {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add text shadow for better readability */
+        }
+        .form-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            padding: 20px 0;
+            background-color: #343a40; /* Dark background for footer */
+            color: white;
+        }
+        footer a {
+            color: #ffc107; /* Bootstrap warning color */
+        }
+        .form-group label {
+            font-weight: bold; /* Bold labels for better visibility */
+        }
+        .alert {
+            margin-top: 20px;
+        }
+        .testimonial-card, .faq-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.2s; /* Add transition for hover effect */
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .testimonial-card:hover, .faq-card:hover {
+            transform: scale(1.05); /* Slightly scale up on hover */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        .icon {
+            font-size: 32px;
+            margin-right: 10px;
+            color: #007bff; /* Bootstrap primary color */
+        }
+        .btn-primary {
+            transition: background-color 0.3s, transform 0.2s; /* Add transition for buttons */
+        }
+        .btn-primary:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            transform: translateY(-2px); /* Lift effect on hover */
+        }
+        .found-items-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .found-item-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            background-color: white;
+            transition: transform 0.2s; /* Add transition for hover effect */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .found-item-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .found-item-card img {
+            border-radius: 5px; /* Round corners for images */
+            max-width: 100%; /* Ensure images are responsive */
+            height: auto; /* Maintain aspect ratio */
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <div class="hero">
+            <h1>One Big Find 🦅</h1>
+            {% if user.is_authenticated %}
+                <h2>Hello, {{ user.username }}!</h2>
+                <p>Welcome to One Big Find, your go-to platform for finding lost items within the Ateneo community.</p>
+                <p>What service would you like to use?</p>
+
+                <form method="post" id="report-lost-item-form" action="{% url 'report_found_item' %}" class="text-center">
+                    {% csrf_token %}
+                    <label for="service">Select a service:</label>
+                    <select id="service" name="service" class="form-control d-inline-block w-auto">
+                        <option value="report_found_item">Report a Found Item</option>
+                        <option value="search_lost_item">Search for Lost Items</option>
+                    </select>
+                    <button type="button" class="btn btn-light mt-2" onclick="handleSubmit()">Get Started</button>
+                </form>
+                
+                <script>
+                    function handleSubmit() {
+                        var serviceSelect = document.getElementById('service');
+                        var selectedValue = serviceSelect.value;
+
+                        // Redirect based on selected service
+                        if (selectedValue === 'report_found_item') {
+                            document.getElementById('report-lost-item-form').action = "{% url 'report_found_item' %}";
+                            document.getElementById('report-lost-item-form').submit(); // Submit the form
+                        } else if (selectedValue === 'search_lost_item') {
+                            // Redirect to the search lost item page
+                            window.location.href = "{% url 'search_lost_item' %}"; // Navigate to search page
+                        }
+                    }
+                </script>
+            {% else %}
+                <p>Please <a href="{% url 'login' %}">login</a> or <a href="{% url 'signup' %}">sign up</a> to use our services.</p>
+            {% endif %}
+        </div>
+
+        <h3 class="text-center mt-5">Featured Lost Items</h3>
+        <div class="found-items-gallery row mt-4">
+            {% for item in lost_items %}
+                <div class="found-item-card col-md-4 text-center mb-4">
+                    {% if item.photo %}
+                    <img src="{{ found_item.image.url }}" alt="Item Image" class="item-image"> 
+                {% else %}
+                    <img src="{% static 'found_items/default_item.jpg' %}" alt="{{ item.name }}" class="img-fluid" style="max-width: 200px; max-height: 200px;">
+                {% endif %}
+
+                    <h5 class="mt-2">{{ item.name }}</h5>  <!-- Display the name of the lost item -->
+                </div>
+            {% empty %}
+                <p class="text-center">No lost items to display.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Testimonials Section -->
+        <h3 class="text-center mt-5">What Our Users Say</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <p class="icon"><i class="fas fa-user-circle"></i></p>
+                    <p>"I found my lost wallet thanks to One Big Find! The community is so helpful!"</p>
+                    <p><strong>- Sarah L.</strong></p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <p class="icon"><i class="fas fa-user-circle"></i></p>
+                    <p>"This platform made it easy to report my lost phone. Highly recommend!"</p>
+                    <p><strong>- John D.</strong></p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <p class="icon"><i class="fas fa-user-circle"></i></p>
+                    <p>"I was reunited with my backpack within a week. Thank you, One Big Find!"</p>
+                    <p><strong>- Emily R.</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQs Section -->
+        <h3 class="text-center mt-5">Frequently Asked Questions</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="faq-card">
+                    <h5>How do I report a lost item?</h5>
+                    <p>Simply fill out the report form with the item details, and we will notify you if it's found.</p>
+                </div>
+                <div class="faq-card">
+                    <h5>Can I upload a photo of the item?</h5>
+                    <p>Yes! You can upload an image of the item when filling out the report form.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="faq-card">
+                    <h5>What should I do if I find an item?</h5>
+                    <p>Please report it through the "Report a Found Item" section on our platform.</p>
+                </div>
+                <div class="faq-card">
+                    <h5>How will I be notified if my item is found?</h5>
+                    <p>You will receive an email or phone call based on the contact details you provided.</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-5">
+            <hr>
+            <h3>Contact Details</h3>
+            <p>
+                Email: <a href="mailto:ls.one@ateneo.edu">ls.one@ateneo.edu</a><br>
+                Phone: 8426-6001 local 5020-5021<br>
+                Address: OADSA, Xavier Hall, Ateneo de Manila University, Katipunan Ave, Quezon City, 1108 Metro Manila, Philippines
+            </p>
+            <p>
+                Operating Hours:<br>
+                Monday to Friday: 8:00 AM - 5:00 PM<br>
+                Saturday: 9:00 AM - 12:00 PM
+            </p>
+        </footer>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery for Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script> <!-- Popper.js for Bootstrap -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> <!-- Bootstrap JS -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> <!-- Font Awesome for icons -->
+</body>
+</html>

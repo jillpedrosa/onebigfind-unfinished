@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost Item Images</title>
+    <link rel="stylesheet" href="{% static 'lostandfound/css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="text-center">Lost Item Images</h1>
+        <div class="row">
+            {% for item in lost_items %}
+                <div class="col-md-4 mb-4">
+                    {% if item.image %}
+                        <div class="card">
+                            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.name }}</h5>
+                                <p class="card-text"><strong>Unique Features:</strong> {{ item.unique_features }}</p>
+                                <p class="card-text"><strong>Location Lost:</strong> {{ item.location_lost }}</p>
+                                <p class="card-text"><strong>Date Lost:</strong> {{ item.date_lost }}</p>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="text-center">No image available for {{ item.name }}.</p>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p class="text-center">No lost items available.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

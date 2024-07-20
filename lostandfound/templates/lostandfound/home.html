@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Added viewport for responsiveness -->
+    <title>One Big Find 🦅 - Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'lostandfound/css/style.css' %}"> <!-- Link to your custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background color */
+            font-family: 'Poppins', serif; /* Use Poppins font */
+        }
+        .hero {
+            background-color: #007bff; /* Bootstrap primary color */
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .card {
+            margin-top: -30px; /* Overlap with hero */
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            padding: 20px 0;
+            background-color: #343a40; /* Dark background for footer */
+            color: white;
+        }
+        footer a {
+            color: #ffc107; /* Bootstrap warning color */
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <div class="hero">
+            <h1>One Big Find 🦅</h1>
+            <h2>Log In</h2>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <form method="post" action="{% url 'homepage' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" class="form-control" required>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                </form>
+                <p class="text-center mt-3">Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; {{ current_year }} One Big Find. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery for Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script> <!-- Popper.js for Bootstrap -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> <!-- Bootstrap JS -->
+</body>
+</html>

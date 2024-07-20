@@ -1,0 +1,6 @@
+<h1>Lost Items</h1>
+<ul>
+  {% for item in lost_items %}
+    <li>{{ item.name }} ({{ item.date_lost }})</li>
+  {% endfor %}
+</ul>

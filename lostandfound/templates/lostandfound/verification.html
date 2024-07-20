@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %} <!-- Load the static template tag library -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Big Find - Verification Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"> <!-- Google Fonts -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+            background-color: #f0f0f0; /* Light gray background color */
+            /* Removed background-image */
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #007bff; /* Bootstrap primary color */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.8em;
+            color: #555;
+            text-align: center;
+        }
+        .form-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            position: relative; /* Ensure it can receive pointer events */
+            z-index: 1; /* Ensure it's above other content */
+        }
+        label {
+            font-weight: bold; /* Bold labels for better visibility */
+        }
+        input[type="text"], input[type="date"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #007bff; /* Blue border */
+            border-radius: 5px;
+            box-sizing: border-box; /* Include padding and border in element's total width and height */
+        }
+        .submission-info {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .declaration {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+        .thank-you {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            padding: 20px 0;
+            background-color: #343a40; /* Dark background for footer */
+            color: white;
+        }
+        footer a {
+            color: #ffc107; /* Bootstrap warning color */
+        }
+        button[type="submit"] {
+            background-color: #007bff; /* Bootstrap primary color */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow for better visibility */
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>One Big Find 🦅</h1>
+
+    <div class="form-section">
+        <h2>Instructions</h2>
+        <p>Please fill out this form to verify that you are the rightful owner of the item you have reported lost or found. Submit this form along with any required documentation as specified below.</p>
+    </div>
+    
+    <form action="{% url 'verification' lost_item.id %}" method="POST" enctype="multipart/form-data"> <!-- Adjust action to use Django URL -->
+        {% csrf_token %} <!-- Include CSRF token for security -->
+        <div class="form-section">
+            <label for="reference-number">Reference Number:</label>
+            <input type="text" id="reference-number" name="reference_number" required> <!-- Use snake_case for consistency -->
+    
+            <label for="date">Date of Purchase:</label>
+            <input type="date" id="date" name="date" required> <!-- Change to type="date" -->
+        </div>
+    
+        <div class="form-section">
+            <h2>Provide any of the following for proof of ownership:</h2>
+            <ul>
+                <li>Purchase Receipt/Invoice: Attach a copy of the receipt or invoice showing the purchase of the item.</li>
+                <li>Photographs: Attach photos of the item in your possession before it was lost. Highlight any unique features that can help identify the item.</li>
+                <li>Serial Number Verification: Provide a clear image showing the serial number on the item (if applicable).</li>
+                <li>Warranty/Registration Document: Attach a copy of the warranty or registration document for the item.</li>
+                <li>Other Proof: Any other documents or evidence that can verify your ownership (e.g., user manual with your name, packaging with identifiable marks).</li>
+            </ul>
+        </div>
+    
+        <div class="form-section">
+            <label for="additional-info">Please provide any additional information that can help verify your ownership of the item:</label>
+            <textarea id="additional-info" name="additional_info" rows="5"></textarea>
+        </div>
+    
+        <div class="declaration">
+            <h2>Declaration</h2>
+            <p>I, the undersigned, declare that the information provided in this form is true and accurate to the best of my knowledge. I understand that providing false information may result in the forfeiture of my claim to the item.</p>
+            <label for="signature">Signature:</label>
+            <input type="text" id="signature" name="signature" required>
+    
+            <label for="signature-date">Date:</label>
+            <input type="date" id="signature-date" name="signature_date" required> <!-- Change to type="date" -->
+        </div>
+    
+        <div class="submission-info">
+            <h2>Submission Instructions</h2>
+            <p>Please submit the completed form along with the required documentation to:</p>
+            <p>Email: <a href="mailto:onebigfind.obf@gmail.com">onebigfind.obf@gmail.com</a></p>
+            <p>Mail: One Big Find, Verification Department, OADSA, Xavier Hall, Ateneo de Manila University</p>
+            <p>For any questions or assistance, please contact us at (02) 84266001 or <a href="mailto:support@onebigfind.com">support@onebigfind.com</a>.</p>
+        </div>
+    
+        <button type="submit">Submit Verification</button>
+    </form>
+    
+    <div class="thank-you">
+        <p>Thank you for helping us ensure that items are returned to their rightful owners.</p>
+        <p>Best regards,<br>The One Big Find Team</p>
+    </div>
+
+    <footer>
+        <p>&copy; {{ current_year }} One Big Find. All rights reserved.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery for Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script> <!-- Popper.js for Bootstrap -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> <!-- Bootstrap JS -->
+</body>
+</html>

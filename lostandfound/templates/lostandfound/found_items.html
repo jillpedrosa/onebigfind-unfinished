@@ -1,0 +1,6 @@
+<h1>Found Items</h1>
+<ul>
+  {% for item in found_items %}
+    <li>{{ item.name }} ({{ item.date_found }})</li>
+  {% endfor %}
+</ul>

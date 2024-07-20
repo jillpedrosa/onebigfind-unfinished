@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Added viewport for responsiveness -->
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background color */
+            font-family: 'Poppins', serif; /* Use Poppins font */
+        }
+        .hero {
+            background-color: #007bff; /* Bootstrap primary color */
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .form-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            padding: 20px 0;
+            background-color: #343a40; /* Dark background for footer */
+            color: white;
+        }
+        footer a {
+            color: #ffc107; /* Bootstrap warning color */
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <div class="hero">
+            <h1>One Big Find 🦅</h1>
+            <h2>{{ title }}</h2>
+        </div>
+
+        <div class="form-section">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}">Username:</label>
+                    {{ form.username }} <!-- Render username field -->
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">Email:</label>
+                    {{ form.email }} <!-- Render email field -->
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.password.id_for_label }}">Password:</label>
+                    {{ form.password }} <!-- Render password field -->
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.confirm_password.id_for_label }}">Confirm Password:</label>
+                    {{ form.confirm_password }} <!-- Render confirm password field -->
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                </div>
+            </form>
+
+            {% if form.errors %}
+                <div class="alert alert-danger mt-3">
+                    <h5>Please correct the following errors:</h5>
+                    <ul>
+                        {% for field, errors in form.errors.items %}
+                            <li>{{ field }}: {{ errors|join:", " }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+
+        <footer>
+            <p>&copy; {{ current_year }} One Big Find. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery for Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script> <!-- Popper.js for Bootstrap -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> <!-- Bootstrap JS -->
+</body>
+</html>
